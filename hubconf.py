@@ -16,14 +16,14 @@ from utils_vad import (init_jit_model,
                        OnnxWrapper)
 
 
-def silero_vad(onnx=False):
+def silero_vad(onnx=False, force_onnx_cpu=False):
     """Silero Voice Activity Detector
     Returns a model with a set of utils
     Please see https://github.com/snakers4/silero-vad for usage examples
     """
     hub_dir = os.getcwd()+ "/core"#torch.hub.get_dir()
     if onnx:
-        model = OnnxWrapper(f'{hub_dir}/silero-vad/files/silero_vad.onnx')
+        model = OnnxWrapper(f'{hub_dir}/silero-vad/files/silero_vad.onnx', force_onnx_cpu)
     else:
         model = init_jit_model(model_path=f'{hub_dir}/silero-vad/files/silero_vad.jit')
     utils = (get_speech_timestamps,
@@ -35,7 +35,7 @@ def silero_vad(onnx=False):
     return model, utils
 
 
-def silero_number_detector(onnx=False):
+def silero_number_detector(onnx=False, force_onnx_cpu=False):
     """Silero Number Detector
     Returns a model with a set of utils
     Please see https://github.com/snakers4/silero-vad for usage examples
@@ -44,7 +44,7 @@ def silero_number_detector(onnx=False):
         url = 'https://models.silero.ai/vad_models/number_detector.onnx'
     else:
         url = 'https://models.silero.ai/vad_models/number_detector.jit'
-    model = Validator(url)
+    model = Validator(url, force_onnx_cpu)
     utils = (get_number_ts,
              save_audio,
              read_audio,
@@ -54,7 +54,7 @@ def silero_number_detector(onnx=False):
     return model, utils
 
 
-def silero_lang_detector(onnx=False):
+def silero_lang_detector(onnx=False, force_onnx_cpu=False):
     """Silero Language Classifier
     Returns a model with a set of utils
     Please see https://github.com/snakers4/silero-vad for usage examples
@@ -63,14 +63,14 @@ def silero_lang_detector(onnx=False):
         url = 'https://models.silero.ai/vad_models/number_detector.onnx'
     else:
         url = 'https://models.silero.ai/vad_models/number_detector.jit'
-    model = Validator(url)
+    model = Validator(url, force_onnx_cpu)
     utils = (get_language,
              read_audio)
 
     return model, utils
 
 
-def silero_lang_detector_95(onnx=False):
+def silero_lang_detector_95(onnx=False, force_onnx_cpu=False):
     """Silero Language Classifier (95 languages)
     Returns a model with a set of utils
     Please see https://github.com/snakers4/silero-vad for usage examples
@@ -81,7 +81,7 @@ def silero_lang_detector_95(onnx=False):
         url = 'https://models.silero.ai/vad_models/lang_classifier_95.onnx'
     else:
         url = 'https://models.silero.ai/vad_models/lang_classifier_95.jit'
-    model = Validator(url)
+    model = Validator(url, force_onnx_cpu)
 
     with open(f'{hub_dir}/snakers4_silero-vad_master/files/lang_dict_95.json', 'r') as f:
         lang_dict = json.load(f)
